@@ -1,0 +1,7 @@
+# Web app and image processing
+flask>=3.0
+numpy>=1.24
+opencv-python-headless>=4.8
+
+# Break-beam sensor: only on a Raspberry Pi (armv6/7 or 64-bit)
+RPi.GPIO; platform_machine in "armv6l armv7l aarch64"

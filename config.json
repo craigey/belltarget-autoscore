@@ -1,0 +1,49 @@
+{
+  "cameras": [
+    0
+  ],
+  "lane_names": {
+    "0": "Lane 1"
+  },
+  "shot_directory": "shots",
+  "shots_per_round": 6,
+  "scoring_style": "bell",
+  "use_4_ring_scoring": true,
+  "enable_bull_hole_bonus": false,
+  "pellet_mm": 4.5,
+  "detection_fps": 5,
+  "min_confidence": 0.6,
+  "shot_cooldown_seconds": 1.0,
+  "bell_match_window_seconds": 1.5,
+  "adaptive_threshold": true,
+  "color_detection": true,
+  "diff_threshold": 25,
+  "grey_threshold": 15,
+  "min_zoom": 1.0,
+  "max_zoom": 4.0,
+  "zoom_step": 0.1,
+  "record_shots": true,
+  "record_full_frame": false,
+  "record_crop_size": 200,
+  "optimize_camera_on_start": true,
+  "auto_lock_exposure": true,
+  "exposure_stabilization_frames": 30,
+  "enable_breakbeam": false,
+  "camera_profile": {
+    "auto_exposure": 3,
+    "exposure_dynamic_framerate": 1,
+    "focus_automatic_continuous": 1,
+    "power_line_frequency": 2,
+    "brightness": 128,
+    "contrast": 128,
+    "saturation": 128,
+    "sharpness": 128,
+    "gain": 0
+  },
+  "bell_sensors": {
+    "0": 17
+  },
+  "detection_mode": "binary",
+  "normalise_light": true,
+  "min_mark_percent": 25
+}
