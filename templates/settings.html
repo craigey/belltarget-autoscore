@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Settings</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/modal-theme.css">
+  <style>
+    body { margin: 0; padding: 0; background: #0a0a0a; color: #f0f0f0; font-family: 'Segoe UI', sans-serif; }
+    .nav-bar { background: #000; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; }
+    .nav-btn { background: #222; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 700; border: 1px solid #444; margin-left: 10px; transition: all 0.2s; }
+    .nav-btn:hover { background: #333; }
+    .nav-btn.active { background: #c5a000; color: #000; border-color: #c5a000; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .section { background: #161616; border: 2px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .section-header { font-size: 20px; font-weight: 700; color: #c5a000; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #333; }
+    
+    .form-group { margin: 15px 0; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: #ddd; margin-bottom: 8px; }
+    .form-help { font-size: 11px; color: #888; margin-top: 5px; }
+    
+    input[type="checkbox"] { width: 18px; height: 18px; margin-right: 8px; cursor: pointer; }
+    input[type="text"], input[type="number"] { background: #000; color: #c5a000; border: 1px solid #444; padding: 10px 12px; border-radius: 4px; font-weight: 700; font-size: 14px; width: 100%; max-width: 600px; }
+    select { background: #000; color: #c5a000; border: 1px solid #444; padding: 8px 12px; border-radius: 4px; font-weight: 700; font-size: 14px; }
+    
+    .btn-small { padding: 8px 16px; font-size: 13px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-weight: 700; margin-top: 10px; }
+    .btn-small:hover { background: #333; }
+    .btn-primary { background: #4CAF50; border-color: #4CAF50; }
+    .btn-primary:hover { background: #45a049; }
+    
+    .info-box { background: #0a0a0a; padding: 12px; border-radius: 6px; border: 1px solid #444; margin-top: 10px; }
+    code { color: #c5a000; background: #000; padding: 2px 6px; border-radius: 3px; }
+    .slider { width: 100%; max-width: 400px; }
+    .value-display { font-size: 16px; color: #c5a000; font-weight: 700; margin: 5px 0; }
+  </style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <div><h2 style="margin: 0; color: #c5a000;">⚙️ Settings</h2></div>
+  <div>
+    <a href="/" class="nav-btn">🏠 Main</a>
+    <a href="/camera" class="nav-btn">📹 Camera</a>
+    <a href="/settings" class="nav-btn active">⚙️ Settings</a>
+    <a href="/rounds" class="nav-btn">📂 Rounds</a>
+    <a href="/spectator_fullscreen" class="nav-btn">👥 Spectator</a>
+    <a href="/help" class="nav-btn">❓ Help</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-header">🎯 Match Settings</div>
+    
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="use4Ring" onchange="saveScoringConfig()">
+        Use 4-Ring Scoring
+      </label>
+      <div class="form-help">
+        ✓ Checked: the optional 4" ring scores 1 point (1"=4, 2"=3, 3"=2, 4"=1)<br>
+        ✗ Unchecked: 3 rings only (1"=4, 2"=3, 3"=2, outside 3" scores 0)
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="bullHoleBonus" onchange="saveScoringConfig()">
+        Clean bell scores 5.1 (instead of 5)
+      </label>
+      <div class="form-help">A bell with no mark on the edge of the hole scores 5.1. Applies to both scoring styles. Leave unchecked if your club scores a clean bell as 5.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Shots Per Round</label>
+      <select id="shotsPerRound" onchange="saveScoringConfig()">
+        <option value="5">5 Shots</option>
+        <option value="6" selected>6 Shots</option>
+        <option value="10">10 Shots</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">📸 Shot Recording</div>
+    
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="recordingEnabled" checked onchange="saveRecordingConfig()">
+        Enable Shot Recording
+      </label>
+      <div class="form-help">Save image of each shot for review</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="recordFullFrame" onchange="saveRecordingConfig()">
+        Record Full Frame
+      </label>
+      <div class="form-help">Save entire frame instead of cropped region</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Crop Size (pixels)</label>
+      <select id="cropSize" onchange="saveRecordingConfig()">
+        <option value="150">150x150 (Small)</option>
+        <option value="200" selected>200x200 (Medium)</option>
+        <option value="300">300x300 (Large)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Shot Directory Path</label>
+      <input type="text" id="shotDirectory" placeholder="shots">
+      <button class="btn-small btn-primary" onclick="saveShotDirectory()">Save Directory</button>
+      <div class="form-help">
+        Location where shot images and rounds are saved.
+      </div>
+      <div class="info-box" style="margin-top: 10px;">
+        <div style="font-size: 12px; color: #888; margin-bottom: 5px;">Current Directory:</div>
+        <code id="currentShotDir">shots</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">🎥 Detection Performance</div>
+    
+    <div class="form-group">
+      <label class="form-label">Detection Framerate (FPS)</label>
+      <select id="detectionFPS" onchange="saveDetectionFPS()">
+        <option value="30">30 FPS - Full Speed (High CPU)</option>
+        <option value="15">15 FPS - Half Speed</option>
+        <option value="10">10 FPS - Recommended</option>
+        <option value="5" selected>5 FPS - Low CPU (Recommended)</option>
+        <option value="3">3 FPS - Very Low CPU</option>
+        <option value="1">1 FPS - Minimum</option>
+      </select>
+      <div class="form-help">
+        <strong>IMPORTANT:</strong> Lower framerate reduces CPU usage without affecting live video.<br>
+        <strong>5 FPS (1 frame every 0.2 seconds) is recommended for pellet detection.</strong><br>
+        Live video always displays at full camera framerate (30 FPS).
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Shot Cooldown (seconds)</label>
+      <input type="number" id="shotCooldown" min="0.2" max="10" step="0.1" value="1" onchange="saveAdvancedConfig()" style="width: 100px;">
+      <div class="form-help">Time to wait after a shot before looking for the next one (prevents a pellet being counted twice)</div>
+    </div>
+
+    </div>
+
+  <div class="section">
+    <div class="section-header">🔧 Detection Algorithm</div>
+    
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="adaptiveThreshold" checked onchange="saveAdvancedConfig()">
+        Adaptive Threshold
+      </label>
+      <div class="form-help">Use adaptive thresholding for better detection in varying light</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">
+        <input type="checkbox" id="colorDetection" checked onchange="saveAdvancedConfig()">
+        Color Detection
+      </label>
+      <div class="form-help">Detect grey lead marks using color analysis</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Minimum Confidence</label>
+      <input type="range" id="minConfidence" class="slider" min="0.3" max="0.9" step="0.05" value="0.6" oninput="updateConfidenceValue(this.value)" onchange="saveAdvancedConfig()">
+      <div class="value-display">
+        <span id="confidenceValue">0.6</span>
+      </div>
+      <div class="form-help">Minimum AI confidence required to register a shot (higher = fewer false positives)</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Minimum Mark Size</label>
+      <input type="range" id="minMarkPercent" class="slider" min="5" max="100" step="5" value="25" oninput="updateMarkPercent(this.value)" onchange="saveAdvancedConfig(); refreshMarkSize()">
+      <div class="value-display">
+        <span id="markPercentValue">25</span>% of a pellet's area
+        <small id="markSizeHint" style="display: block;"></small>
+      </div>
+      <div class="form-help">Smallest mark counted. Lower = more sensitive (catches small marks but more noise). Higher = fewer false positives.</div>
+    </div>
+
+    </div>
+
+  <div class="section">
+    <div class="section-header">🎨 Camera Zoom Limits</div>
+    
+    <div class="form-group">
+      <label class="form-label">Minimum Zoom</label>
+      <input type="number" id="minZoom" min="1.0" max="2.0" step="0.1" value="1.0" onchange="saveZoomConfig()" style="width: 100px;">
+      <div class="form-help">Minimum zoom level (1.0 = no zoom)</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Maximum Zoom</label>
+      <input type="number" id="maxZoom" min="2.0" max="8.0" step="0.5" value="4.0" onchange="saveZoomConfig()" style="width: 100px;">
+      <div class="form-help">Maximum zoom level</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Zoom Step</label>
+      <input type="number" id="zoomStep" min="0.05" max="0.5" step="0.05" value="0.1" onchange="saveZoomConfig()" style="width: 100px;">
+      <div class="form-help">Zoom adjustment increment</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/modal-theme.js"></script>
+<script>
+window.onload = function() {
+  refreshMarkSize();
+  loadAllSettings();
+};
+
+async function loadAllSettings() {
+  try {
+    const scoreResponse = await fetch('/get_scoring_config');
+    const scoreData = await scoreResponse.json();
+    document.getElementById('use4Ring').checked = scoreData.use_4_ring;
+    document.getElementById('bullHoleBonus').checked = scoreData.enable_bull_hole_bonus;
+    document.getElementById('shotsPerRound').value = scoreData.shots_per_round || 6;
+    
+    const configResponse = await fetch('/get_config');
+    const config = await configResponse.json();
+    
+    document.getElementById('recordingEnabled').checked = config.record_shots;
+    document.getElementById('recordFullFrame').checked = config.record_full_frame;
+    document.getElementById('cropSize').value = config.crop_size || 200;
+    document.getElementById('shotDirectory').value = config.shot_directory || 'shots';
+    document.getElementById('currentShotDir').textContent = config.shot_directory || 'shots';
+    
+    document.getElementById('detectionFPS').value = config.detection_fps || 5;
+    document.getElementById('shotCooldown').value = config.shot_cooldown_seconds || 1;
+    
+    document.getElementById('adaptiveThreshold').checked = config.adaptive_threshold;
+    document.getElementById('colorDetection').checked = config.color_detection;
+    document.getElementById('minConfidence').value = config.min_confidence || 0.6;
+    document.getElementById('minMarkPercent').value = config.min_mark_percent || 25;
+    document.getElementById('markPercentValue').textContent = config.min_mark_percent || 25;
+    document.getElementById('confidenceValue').textContent = config.min_confidence || 0.6;
+    
+    document.getElementById('minZoom').value = config.min_zoom || 1.0;
+    document.getElementById('maxZoom').value = config.max_zoom || 4.0;
+    document.getElementById('zoomStep').value = config.zoom_step || 0.1;
+    
+  } catch (err) {
+    showToast('Failed to load settings', 'error');
+  }
+}
+
+async function saveScoringConfig() {
+  const config = {
+    use_4_ring: document.getElementById('use4Ring').checked,
+    enable_bull_hole_bonus: document.getElementById('bullHoleBonus').checked,
+    shots_per_round: parseInt(document.getElementById('shotsPerRound').value)
+  };
+  try {
+    await fetch('/set_scoring_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    showToast('Scoring settings saved', 'success');
+  } catch (err) {
+    showToast('Failed to save scoring settings', 'error');
+  }
+}
+
+async function saveRecordingConfig() {
+  const config = {
+    record_shots: document.getElementById('recordingEnabled').checked,
+    record_full_frame: document.getElementById('recordFullFrame').checked,
+    crop_size: parseInt(document.getElementById('cropSize').value)
+  };
+  try {
+    await fetch('/set_recording_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    showToast('Recording settings saved', 'success');
+  } catch (err) {
+    showToast('Failed to save recording settings', 'error');
+  }
+}
+
+async function saveShotDirectory() {
+  const directory = document.getElementById('shotDirectory').value.trim();
+  if (!directory) {
+    showToast('Please enter a directory path', 'warning');
+    return;
+  }
+  try {
+    const response = await fetch('/set_shot_directory', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ directory: directory })
+    });
+    const result = await response.json();
+    if (result.success) {
+      document.getElementById('currentShotDir').textContent = directory;
+      showToast('Shot directory updated', 'success');
+    } else {
+      showToast(result.error || 'Failed to set directory', 'error');
+    }
+  } catch (err) {
+    showToast('Failed to save directory', 'error');
+  }
+}
+
+async function saveDetectionFPS() {
+  const fps = parseInt(document.getElementById('detectionFPS').value);
+  try {
+    await fetch(`/set_detection_fps/${fps}`);
+    showToast(`Detection framerate set to ${fps} FPS`, 'success');
+  } catch (err) {
+    showToast('Failed to save detection framerate', 'error');
+  }
+}
+
+function updateMarkPercent(v) {
+  document.getElementById('markPercentValue').textContent = v;
+}
+
+async function refreshMarkSize() {
+  try {
+    const r = await fetch('/min_mark_size');
+    const d = await r.json();
+    document.getElementById('markSizeHint').textContent = d.calibrated
+      ? `Smallest counted mark: ${d.min_diameter_px} px across (a pellet is ${d.pellet_diameter_px} px)`
+      : 'Calibrate the target to see the size in pixels';
+  } catch (e) { /* ignore */ }
+}
+
+async function saveAdvancedConfig() {
+  const config = {
+    adaptive_threshold: document.getElementById('adaptiveThreshold').checked,
+    color_detection: document.getElementById('colorDetection').checked,
+    min_confidence: parseFloat(document.getElementById('minConfidence').value),
+    min_mark_percent: parseInt(document.getElementById('minMarkPercent').value),
+    shot_cooldown_seconds: parseFloat(document.getElementById('shotCooldown').value),
+  };
+  try {
+    await fetch('/set_advanced_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    showToast('Advanced settings saved', 'success');
+  } catch (err) {
+    showToast('Failed to save advanced settings', 'error');
+  }
+}
+
+async function saveZoomConfig() {
+  const config = {
+    min_zoom: parseFloat(document.getElementById('minZoom').value),
+    max_zoom: parseFloat(document.getElementById('maxZoom').value),
+    zoom_step: parseFloat(document.getElementById('zoomStep').value)
+  };
+  try {
+    await fetch('/set_zoom_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    });
+    showToast('Zoom settings saved', 'success');
+  } catch (err) {
+    showToast('Failed to save zoom settings', 'error');
+  }
+}
+
+function updateConfidenceValue(value) {
+  document.getElementById('confidenceValue').textContent = value;
+}
+</script>
+
+</body>
+</html>
